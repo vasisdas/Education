@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <script src="~/Scripts/MicrosoftAjax.js"></script>
+    <script src="~/Scripts/MicrosoftMvcAjax.debug.js"></script>
+    <script src="~/Scripts/MicrosoftMvcAjax.js"></script>
+    <script src="~/Scripts/jquery-1.5.1.min.js"></script>
+    <script>
+        function buttonClick(bool) {
+            $.ajax({
+                type: "GET",
+                url: '/Home/GetData?withError=' + bool,
+                dataType: 'json',
+                success: function (data) {
+                    $('#id').html(data["Id"]);
+                    $('#name').html(data["Name"]);
+                    $('#age').html(data["Age"]);
+                    var Sex = data["Sex"];
+                    if (Sex == 0) {
+                        $('#male').attr('checked', true);
+                        $('#female').attr('checked', false);
+                    } else {
+                        $('#male').attr('checked', false);
+                        $('#female').attr('checked', true);
+                    };
+                },
+                error: function () {
+                    alert("Response Data with error!!!");
+                }
+            });
+        };
+        $(document).ready(function () {
+            $('#btnGetData').click(function () {
+                buttonClick(false);
+            });
+
+            $('#btnGetDataWithError').click(function () {
+                buttonClick(true);
+            });           
+        });
+    </script>
+</head>
+<body>
+    <h2>Index</h2>
+
+    <input type="button" id="btnGetData" value="Получить данные" />
+    <input type="button" id="btnGetDataWithError" value="Получить данные с ошибкой" />
+    <fieldset>
+        <div class="item">
+            <label>Id</label>
+            <span id="id">-</span>
+        </div>
+        <div class="item">
+            <label>Имя</label>
+            <span id="name">-</span>
+        </div>
+        <div class="item">
+            <label>Возраст</label>
+            <span id="age">-</span>
+        </div>
+        <div class="item">
+            <label>Пол</label>
+            <input type="radio" id="male" name="sex" /> мужской
+            <input type="radio" id="female" name="sex" /> женский
+        </div>
+    </fieldset>
+</body>
